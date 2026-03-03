@@ -707,11 +707,20 @@ function loadState(month) {
     const script = document.createElement('script');
     
     window[callbackName] = function(data) {
-      delete window[callbackName];
-      document.body.removeChild(script);
-      resolve(data ? JSON.parse(data) : null);
-      console.log("Datos recibidos:", data);
-    };
+  console.log("Datos recibidos:", data);
+  console.log("Tipo:", typeof data);
+  console.log("Longitud:", data ? data.length : 0);
+  delete window[callbackName];
+  document.body.removeChild(script);
+  try {
+    const parsed = data ? JSON.parse(data) : null;
+    console.log("Parsed OK:", parsed);
+    resolve(parsed);
+  } catch(e) {
+    console.log("Error al parsear:", e.message);
+    resolve(null);
+  }
+};
 
     script.src = `${SCRIPT_URL}?mes=${month}&callback=${callbackName}`;
     script.onerror = () => { resolve(null); };
@@ -1169,5 +1178,6 @@ document.getElementById('globalMonth').addEventListener('change', function() {
 </body>
 
 </html>
+
 
 
