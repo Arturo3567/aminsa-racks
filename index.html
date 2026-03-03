@@ -702,10 +702,20 @@ function saveState() {
 }
 
 function loadState(month) {
-  return fetch(`${SCRIPT_URL}?mes=${month}`)
-    .then(r => r.text())
-    .then(t => t ? JSON.parse(t) : null)
-    .catch(() => null);
+  return new Promise((resolve) => {
+    const callbackName = 'cb_' + Date.now();
+    const script = document.createElement('script');
+    
+    window[callbackName] = function(data) {
+      delete window[callbackName];
+      document.body.removeChild(script);
+      resolve(data ? JSON.parse(data) : null);
+    };
+
+    script.src = `${SCRIPT_URL}?mes=${month}&callback=${callbackName}`;
+    script.onerror = () => { resolve(null); };
+    document.body.appendChild(script);
+  });
 }
 
 function initState() {
@@ -1153,4 +1163,5 @@ document.getElementById('globalMonth').addEventListener('change', function() {
 });
 </script>
 </body>
+
 </html>
