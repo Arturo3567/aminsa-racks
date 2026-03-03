@@ -749,6 +749,7 @@ function showSaved() {
 let state = initState();
 
 function switchMonth(month) {
+  console.log("switchMonth llamado con:", month);
   currentMonth = month;
   const el = document.getElementById('saveIndicator');
   el.textContent = "Cargando...";
@@ -1168,4 +1169,5 @@ document.getElementById('globalMonth').addEventListener('change', function() {
 </body>
 
 </html>
+
 
