@@ -710,11 +710,14 @@ function loadState(month) {
       delete window[callbackName];
       document.body.removeChild(script);
       resolve(data ? JSON.parse(data) : null);
+      console.log("Datos recibidos:", data);
     };
 
     script.src = `${SCRIPT_URL}?mes=${month}&callback=${callbackName}`;
     script.onerror = () => { resolve(null); };
     document.body.appendChild(script);
+    console.log("Cargando mes:", month);
+console.log("URL:", script.src);
   });
 }
 
@@ -1165,3 +1168,4 @@ document.getElementById('globalMonth').addEventListener('change', function() {
 </body>
 
 </html>
+
